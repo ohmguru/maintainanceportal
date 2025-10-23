@@ -99,9 +99,16 @@ export default function Home() {
               <thead className="sticky top-0 z-10">
                 <tr>
                   <th rowSpan={2} className="py-1.5 px-3 text-left font-bold bg-gradient-to-r from-purple-600 to-purple-700 text-cyan-300 border-b-2 border-cyan-400/50 uppercase tracking-wider">Location</th>
-                  <th rowSpan={2} className="py-1.5 px-2 text-center font-bold bg-gradient-to-r from-purple-600 to-purple-700 text-pink-300 border-b-2 border-pink-400/50 uppercase tracking-wider border-l-2 border-pink-400/30">
+                  <th
+                    rowSpan={2}
+                    className="py-1.5 px-2 text-center font-bold bg-gradient-to-r from-purple-600 to-purple-700 text-pink-300 border-b-2 border-pink-400/50 uppercase tracking-wider border-l-2 border-pink-400/30 cursor-pointer hover:bg-purple-500 transition-all"
+                    onClick={() => handleSort('composite')}
+                  >
                     <div className="flex flex-col items-center gap-0.5">
-                      <span>Overall</span>
+                      <div className="flex items-center gap-1">
+                        <span>Overall</span>
+                        <span className="text-xs">{getSortIcon('composite')}</span>
+                      </div>
                       <span className="text-[9px] opacity-80">Rank</span>
                     </div>
                   </th>

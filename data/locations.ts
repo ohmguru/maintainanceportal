@@ -13,7 +13,12 @@ export interface Location {
   compositeRank: number;
 }
 
-export const locations: Location[] = [
+// Calculate weighted composite: Battery 66%, Blaster 17%, Vest 17%
+function calculateComposite(blaster: number, vest: number, battery: number): number {
+  return Math.round((blaster * 0.17 + vest * 0.17 + battery * 0.66) * 10) / 10;
+}
+
+const locationsData = [
   {
     name: "ME Gilbert, AZ",
     blaster: 436.2,
@@ -365,3 +370,17 @@ export const locations: Location[] = [
     compositeRank: 25
   }
 ];
+
+// Recalculate composite percentiles with Battery weighted at 66%
+const locationsWithComposite = locationsData.map(loc => ({
+  ...loc,
+  compositePercentile: calculateComposite(loc.blasterPercentile, loc.vestPercentile, loc.batteriesPercentile)
+}));
+
+// Sort by composite percentile (descending) and assign new ranks
+const sortedByComposite = [...locationsWithComposite].sort((a, b) => b.compositePercentile - a.compositePercentile);
+
+export const locations: Location[] = sortedByComposite.map((loc, index) => ({
+  ...loc,
+  compositeRank: index + 1
+}));
