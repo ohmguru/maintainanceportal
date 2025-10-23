@@ -285,7 +285,6 @@ export default function UnifiedAdmin() {
   }
 
   const totalReserve = calculateReserve();
-  const weeks = weekInfos.map(w => w.dateKey);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-900 via-black to-pink-900 p-4">
@@ -414,37 +413,37 @@ export default function UnifiedAdmin() {
                         className="w-16 text-center bg-black/60 border border-green-400/50 rounded px-1 py-1 text-green-300 font-bold focus:border-green-400 focus:outline-none"
                       />
                     </td>
-                    {weeks.map(week => {
-                      const weekData = loc.weeks[week] || { blastersReturned: 0, vestsReturned: 0, batteriesReturned: 0 };
+                    {weekInfos.map(weekInfo => {
+                      const weekData = loc.weeks[weekInfo.dateKey] || { blastersReturned: 0, vestsReturned: 0, batteriesReturned: 0 };
                       return (
                         <>
-                          <td key={`${loc.name}-${week}-b`} className="p-1 text-center border border-pink-500/20">
+                          <td key={`${loc.name}-${weekInfo.dateKey}-b`} className="p-1 text-center border border-pink-500/20">
                             <input
                               type="number"
                               value={weekData.blastersReturned}
-                              onChange={(e) => handleWeekDataChange(loc.name, week, 'blastersReturned', parseFloat(e.target.value) || 0)}
-                              onKeyDown={(e) => handleKeyDown(e, loc.name, week, 'blastersReturned')}
+                              onChange={(e) => handleWeekDataChange(loc.name, weekInfo.dateKey, 'blastersReturned', parseFloat(e.target.value) || 0)}
+                              onKeyDown={(e) => handleKeyDown(e, loc.name, weekInfo.dateKey, 'blastersReturned')}
                               onFocus={handleFocus}
                               className="w-12 text-center bg-black/60 border border-pink-400/30 rounded px-1 text-pink-300 text-xs focus:border-pink-400 focus:outline-none"
                             />
                           </td>
-                          <td key={`${loc.name}-${week}-v`} className="p-1 text-center border border-pink-500/20">
+                          <td key={`${loc.name}-${weekInfo.dateKey}-v`} className="p-1 text-center border border-pink-500/20">
                             <input
                               type="number"
                               value={weekData.vestsReturned}
-                              onChange={(e) => handleWeekDataChange(loc.name, week, 'vestsReturned', parseFloat(e.target.value) || 0)}
-                              onKeyDown={(e) => handleKeyDown(e, loc.name, week, 'vestsReturned')}
+                              onChange={(e) => handleWeekDataChange(loc.name, weekInfo.dateKey, 'vestsReturned', parseFloat(e.target.value) || 0)}
+                              onKeyDown={(e) => handleKeyDown(e, loc.name, weekInfo.dateKey, 'vestsReturned')}
                               onFocus={handleFocus}
                               className="w-12 text-center bg-black/60 border border-pink-400/30 rounded px-1 text-pink-300 text-xs focus:border-pink-400 focus:outline-none"
                             />
                           </td>
-                          <td key={`${loc.name}-${week}-bat`} className="p-1 text-center border border-pink-500/20">
+                          <td key={`${loc.name}-${weekInfo.dateKey}-bat`} className="p-1 text-center border border-pink-500/20">
                             <input
                               type="number"
                               step="0.1"
                               value={weekData.batteriesReturned}
-                              onChange={(e) => handleWeekDataChange(loc.name, week, 'batteriesReturned', parseFloat(e.target.value) || 0)}
-                              onKeyDown={(e) => handleKeyDown(e, loc.name, week, 'batteriesReturned')}
+                              onChange={(e) => handleWeekDataChange(loc.name, weekInfo.dateKey, 'batteriesReturned', parseFloat(e.target.value) || 0)}
+                              onKeyDown={(e) => handleKeyDown(e, loc.name, weekInfo.dateKey, 'batteriesReturned')}
                               onFocus={handleFocus}
                               className="w-12 text-center bg-black/60 border border-pink-400/30 rounded px-1 text-pink-300 text-xs focus:border-pink-400 focus:outline-none"
                             />
