@@ -14,6 +14,7 @@ export async function GET() {
         lastUpdated: new Date().toISOString(),
         allocationBase: 90,
         totalReserve1: 284,
+        finalEmergencyReserve: 142,
         locations: []
       });
     }
@@ -30,8 +31,10 @@ export async function POST(request: Request) {
     const data = await request.json();
     const store = getStore('battery-data');
 
+    // Ensure finalEmergencyReserve exists
     await store.setJSON('inventory', {
       ...data,
+      finalEmergencyReserve: data.finalEmergencyReserve || 142,
       lastUpdated: new Date().toISOString()
     });
 

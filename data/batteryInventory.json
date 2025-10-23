@@ -2,6 +2,7 @@
   "lastUpdated": "2025-10-23T15:17:24.388Z",
   "allocationBase": 90,
   "totalReserve1": 284,
+  "finalEmergencyReserve": 142,
   "locations": [
     {
       "location": "Atlanta",

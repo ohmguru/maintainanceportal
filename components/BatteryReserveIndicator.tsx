@@ -3,14 +3,16 @@
 import { useEffect, useState } from 'react';
 
 export default function BatteryReserveIndicator() {
-  const [reserve, setReserve] = useState<number | null>(null);
+  const [reserve1, setReserve1] = useState<number | null>(null);
+  const [finalReserve, setFinalReserve] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch('/api/battery-inventory')
       .then(res => res.json())
       .then(data => {
-        setReserve(data.totalReserve1 || 0);
+        setReserve1(data.totalReserve1 || 0);
+        setFinalReserve(data.finalEmergencyReserve || 0);
         setLoading(false);
       })
       .catch(err => {
@@ -43,25 +45,42 @@ export default function BatteryReserveIndicator() {
     return 'CRITICAL';
   };
 
+  const totalReserve = (reserve1 || 0) + (finalReserve || 0);
+
   return (
     <div className="flex items-center gap-3 px-4 py-2 bg-black/60 backdrop-blur-sm rounded-lg border-2 border-cyan-500/50 shadow-[0_0_15px_rgba(34,211,238,0.3)]">
-      <div className="flex flex-col">
-        <span className="text-[10px] text-cyan-400 font-bold uppercase tracking-wider">Battery Reserve 1</span>
-        <div className="flex items-baseline gap-2">
-          <span className={`text-2xl font-bold ${getReserveColor(reserve || 0)} font-mono`}>
-            {reserve}
+      <div className="flex flex-col border-r border-cyan-500/30 pr-3">
+        <span className="text-[9px] text-cyan-400 font-bold uppercase tracking-wider">Reserve 1 (Excess)</span>
+        <div className="flex items-baseline gap-1">
+          <span className={`text-xl font-bold ${getReserveColor(reserve1 || 0)} font-mono`}>
+            {reserve1}
           </span>
-          <span className="text-xs text-gray-400">units</span>
         </div>
       </div>
-      <div className={`px-2 py-1 rounded text-[10px] font-bold ${
-        reserve && reserve >= 150
+      <div className="flex flex-col border-r border-purple-500/30 pr-3">
+        <span className="text-[9px] text-purple-400 font-bold uppercase tracking-wider">Final Emergency</span>
+        <div className="flex items-baseline gap-1">
+          <span className="text-xl font-bold text-purple-300 font-mono">
+            {finalReserve}
+          </span>
+        </div>
+      </div>
+      <div className="flex flex-col">
+        <span className="text-[9px] text-pink-400 font-bold uppercase tracking-wider">Total Reserve</span>
+        <div className="flex items-baseline gap-2">
+          <span className={`text-2xl font-bold ${getReserveColor(totalReserve)} font-mono`}>
+            {totalReserve}
+          </span>
+        </div>
+      </div>
+      <div className={`px-2 py-1 rounded text-[9px] font-bold ${
+        totalReserve >= 350
           ? 'bg-green-500/20 text-green-300 border border-green-400/50'
-          : reserve && reserve >= 100
+          : totalReserve >= 250
           ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-400/50'
           : 'bg-red-500/20 text-red-300 border border-red-400/50'
       }`}>
-        {getReserveStatus(reserve || 0)}
+        {getReserveStatus(totalReserve)}
       </div>
     </div>
   );
