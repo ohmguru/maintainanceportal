@@ -291,7 +291,7 @@ export default function UnifiedAdmin() {
 
           <div className="flex gap-4 mb-6">
             <button
-              onClick={handleSave}
+              onClick={() => handleSave(false)}
               disabled={saving}
               className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white px-6 py-3 rounded-lg hover:from-cyan-400 hover:to-purple-400 disabled:opacity-50 font-mono font-bold shadow-[0_0_20px_rgba(34,211,238,0.5)]"
             >
