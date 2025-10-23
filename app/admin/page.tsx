@@ -235,6 +235,10 @@ export default function UnifiedAdmin() {
     }
   };
 
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    e.target.select();
+  };
+
   const getWeekDateRange = (week: number): string => {
     return weekRanges[week - 1] || '';
   };
@@ -374,6 +378,7 @@ export default function UnifiedAdmin() {
                         value={loc.inventory}
                         onChange={(e) => handleInventoryChange(loc.name, parseInt(e.target.value) || 0)}
                         onKeyDown={(e) => handleKeyDown(e, loc.name)}
+                        onFocus={handleFocus}
                         className="w-16 text-center bg-black/60 border border-green-400/50 rounded px-1 py-1 text-green-300 font-bold focus:border-green-400 focus:outline-none"
                       />
                     </td>
@@ -387,6 +392,7 @@ export default function UnifiedAdmin() {
                               value={weekData.blastersReturned}
                               onChange={(e) => handleWeekDataChange(loc.name, week, 'blastersReturned', parseFloat(e.target.value) || 0)}
                               onKeyDown={(e) => handleKeyDown(e, loc.name, week, 'blastersReturned')}
+                              onFocus={handleFocus}
                               className="w-12 text-center bg-black/60 border border-pink-400/30 rounded px-1 text-pink-300 text-xs focus:border-pink-400 focus:outline-none"
                             />
                           </td>
@@ -396,6 +402,7 @@ export default function UnifiedAdmin() {
                               value={weekData.vestsReturned}
                               onChange={(e) => handleWeekDataChange(loc.name, week, 'vestsReturned', parseFloat(e.target.value) || 0)}
                               onKeyDown={(e) => handleKeyDown(e, loc.name, week, 'vestsReturned')}
+                              onFocus={handleFocus}
                               className="w-12 text-center bg-black/60 border border-pink-400/30 rounded px-1 text-pink-300 text-xs focus:border-pink-400 focus:outline-none"
                             />
                           </td>
@@ -406,6 +413,7 @@ export default function UnifiedAdmin() {
                               value={weekData.batteriesReturned}
                               onChange={(e) => handleWeekDataChange(loc.name, week, 'batteriesReturned', parseFloat(e.target.value) || 0)}
                               onKeyDown={(e) => handleKeyDown(e, loc.name, week, 'batteriesReturned')}
+                              onFocus={handleFocus}
                               className="w-12 text-center bg-black/60 border border-pink-400/30 rounded px-1 text-pink-300 text-xs focus:border-pink-400 focus:outline-none"
                             />
                           </td>
