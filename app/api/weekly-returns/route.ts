@@ -5,8 +5,8 @@ export const runtime = 'edge';
 
 interface WeeklyReturn {
   location: string;
-  week: number;
-  weekDateRange: string;
+  weekStartDate: string; // ISO date format: YYYY-MM-DD
+  weekEndDate: string;   // ISO date format: YYYY-MM-DD
   blastersReturned: number;
   vestsReturned: number;
   batteriesReturned: number;

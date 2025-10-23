@@ -131,10 +131,15 @@ export default function BatteryInventoryAdmin() {
               <div className="text-center p-4 bg-blue-50 rounded-lg">
                 <div className="text-xs text-gray-600 mb-2">Allocation Base (per location)</div>
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   value={allocationBase}
-                  onChange={(e) => handleAllocationBaseChange(parseInt(e.target.value) || 90)}
-                  className="text-2xl font-bold text-center w-20 border-2 border-blue-300 rounded px-2 py-1"
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/[^0-9]/g, '');
+                    handleAllocationBaseChange(parseInt(val) || 90);
+                  }}
+                  className="text-2xl font-bold text-center w-20 border-2 border-blue-300 rounded px-2 py-1 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
                 <div className="text-xs text-gray-500 mt-1">batteries</div>
               </div>
@@ -152,10 +157,15 @@ export default function BatteryInventoryAdmin() {
               <div className="text-center p-4 bg-purple-50 rounded-lg">
                 <div className="text-xs text-gray-600 mb-2">Final Emergency Reserve</div>
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   value={finalEmergencyReserve}
-                  onChange={(e) => setFinalEmergencyReserve(parseInt(e.target.value) || 0)}
-                  className="text-2xl font-bold text-center w-20 border-2 border-purple-300 rounded px-2 py-1"
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/[^0-9]/g, '');
+                    setFinalEmergencyReserve(parseInt(val) || 0);
+                  }}
+                  className="text-2xl font-bold text-center w-20 border-2 border-purple-300 rounded px-2 py-1 focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 />
                 <div className="text-xs text-gray-500 mt-1">at GelBlaster HQ</div>
               </div>
@@ -201,12 +211,17 @@ export default function BatteryInventoryAdmin() {
                     <td className="p-3 font-medium">{loc.location}</td>
                     <td className="p-3 text-center text-gray-600">{loc.weeklyFailureRate}</td>
                     <td className="p-3 text-center text-gray-600">{loc.allocationBase}</td>
-                    <td className="p-3 text-center">
+                    <td className="p-0">
                       <input
-                        type="number"
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
                         value={loc.actualInventory}
-                        onChange={(e) => handleInventoryChange(loc.location, parseInt(e.target.value) || 0)}
-                        className="w-24 text-center border-2 border-gray-300 rounded px-2 py-1 font-semibold"
+                        onChange={(e) => {
+                          const val = e.target.value.replace(/[^0-9]/g, '');
+                          handleInventoryChange(loc.location, parseInt(val) || 0);
+                        }}
+                        className="w-full h-full text-center border-0 focus:ring-2 focus:ring-blue-400 focus:outline-none px-3 py-3 font-semibold hover:bg-blue-50 transition-colors"
                       />
                     </td>
                     <td className={`p-3 text-center font-bold ${

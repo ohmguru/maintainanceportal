@@ -9,10 +9,16 @@ interface WeekData {
   batteriesReturned: number;
 }
 
+interface WeekInfo {
+  startDate: Date;
+  endDate: Date;
+  dateKey: string; // Format: "2024-06-08" (ISO start date)
+}
+
 interface LocationData {
   name: string;
   inventory: number;
-  weeks: Record<number, WeekData>;
+  weeks: Record<string, WeekData>; // Key is ISO date string instead of week number
 }
 
 export default function UnifiedAdmin() {
@@ -23,37 +29,58 @@ export default function UnifiedAdmin() {
   const [finalEmergencyReserve, setFinalEmergencyReserve] = useState(142);
 
   // Generate weeks from start date (June 8, 2024) through end of 2025
-  const startDate = new Date('2024-06-08');
-  const endDate = new Date('2025-12-31');
-  const weeks: number[] = [];
-  const weekRanges: string[] = [];
+  const projectStartDate = new Date('2024-06-08');
+  const projectEndDate = new Date('2025-12-31');
+  const weekInfos: WeekInfo[] = [];
 
-  let currentWeekStart = new Date(startDate);
-  let weekNumber = 1;
+  let currentWeekStart = new Date(projectStartDate);
 
-  while (currentWeekStart <= endDate) {
-    weeks.push(weekNumber);
+  while (currentWeekStart <= projectEndDate) {
     const weekEnd = new Date(currentWeekStart);
     weekEnd.setDate(weekEnd.getDate() + 6);
 
-    const startMonth = currentWeekStart.getMonth() + 1;
-    const startDay = currentWeekStart.getDate();
-    const endMonth = weekEnd.getMonth() + 1;
-    const endDay = weekEnd.getDate();
-
-    weekRanges.push(`${startMonth}/${startDay}-${endMonth}/${endDay}`);
+    weekInfos.push({
+      startDate: new Date(currentWeekStart),
+      endDate: new Date(weekEnd),
+      dateKey: currentWeekStart.toISOString().split('T')[0] // YYYY-MM-DD format
+    });
 
     currentWeekStart.setDate(currentWeekStart.getDate() + 7);
-    weekNumber++;
   }
 
-  // Calculate current week based on today's date
-  const getCurrentWeek = () => {
+  // Calculate current week index based on today's date
+  const getCurrentWeekIndex = () => {
     const today = new Date();
-    const diffTime = Math.abs(today.getTime() - startDate.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    const weekNum = Math.ceil(diffDays / 7);
-    return Math.min(weekNum, weeks.length);
+    const todayStr = today.toISOString().split('T')[0];
+
+    for (let i = 0; i < weekInfos.length; i++) {
+      const startStr = weekInfos[i].dateKey;
+      const endStr = weekInfos[i].endDate.toISOString().split('T')[0];
+
+      if (todayStr >= startStr && todayStr <= endStr) {
+        return i;
+      }
+    }
+
+    // If not found, return closest week
+    return Math.max(0, Math.min(weekInfos.length - 1,
+      Math.floor((today.getTime() - projectStartDate.getTime()) / (7 * 24 * 60 * 60 * 1000))
+    ));
+  };
+
+  const formatDateRange = (startDate: Date, endDate: Date): string => {
+    const startMonth = startDate.getMonth() + 1;
+    const startDay = startDate.getDate();
+    const startYear = startDate.getFullYear();
+    const endMonth = endDate.getMonth() + 1;
+    const endDay = endDate.getDate();
+    const endYear = endDate.getFullYear();
+
+    if (startYear === endYear) {
+      return `${startMonth}/${startDay}-${endMonth}/${endDay}/${startYear}`;
+    } else {
+      return `${startMonth}/${startDay}/${startYear}-${endMonth}/${endDay}/${endYear}`;
+    }
   };
 
   useEffect(() => {
@@ -63,8 +90,9 @@ export default function UnifiedAdmin() {
   useEffect(() => {
     if (!loading && data.length > 0) {
       // Auto-scroll to current week after data loads
-      const currentWeek = getCurrentWeek();
-      const currentWeekHeader = document.getElementById(`week-${currentWeek}`);
+      const currentWeekIdx = getCurrentWeekIndex();
+      const currentWeekDateKey = weekInfos[currentWeekIdx]?.dateKey;
+      const currentWeekHeader = document.getElementById(`week-${currentWeekDateKey}`);
       if (currentWeekHeader) {
         currentWeekHeader.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
       }
@@ -80,18 +108,20 @@ export default function UnifiedAdmin() {
       setAllocationBase(inventoryData.allocationBase || 90);
       setFinalEmergencyReserve(inventoryData.finalEmergencyReserve || 142);
 
-      // Load weekly returns from blob storage
+      // Load weekly returns from blob storage (new date-based structure)
       const weeklyRes = await fetch('/api/weekly-returns');
       const weeklyData = await weeklyRes.json();
       const returns = weeklyData.returns || [];
 
-      const weeklyReturns: Record<string, Record<number, WeekData>> = {};
+      const weeklyReturns: Record<string, Record<string, WeekData>> = {};
 
       returns.forEach((r: any) => {
         if (!weeklyReturns[r.location]) {
           weeklyReturns[r.location] = {};
         }
-        weeklyReturns[r.location][r.week] = {
+        // Use weekStartDate as the key (ISO format: YYYY-MM-DD)
+        const dateKey = r.weekStartDate || r.weekDateRange || '';
+        weeklyReturns[r.location][dateKey] = {
           blastersReturned: r.blastersReturned || 0,
           vestsReturned: r.vestsReturned || 0,
           batteriesReturned: r.batteriesReturned || 0
@@ -131,19 +161,19 @@ export default function UnifiedAdmin() {
 
   const handleWeekDataChange = (
     locationName: string,
-    week: number,
+    dateKey: string,
     field: keyof WeekData,
     value: number
   ) => {
     setData(prevData =>
       prevData.map(loc => {
         if (loc.name === locationName) {
-          const weekData = loc.weeks[week] || { blastersReturned: 0, vestsReturned: 0, batteriesReturned: 0 };
+          const weekData = loc.weeks[dateKey] || { blastersReturned: 0, vestsReturned: 0, batteriesReturned: 0 };
           return {
             ...loc,
             weeks: {
               ...loc.weeks,
-              [week]: { ...weekData, [field]: value }
+              [dateKey]: { ...weekData, [field]: value }
             }
           };
         }
@@ -183,13 +213,12 @@ export default function UnifiedAdmin() {
 
       // Save weekly returns to blob
       const weeklyReturns = data.flatMap(loc =>
-        weeks.map(week => {
-          const weekData = loc.weeks[week] || { blastersReturned: 0, vestsReturned: 0, batteriesReturned: 0 };
-          const weekDateRange = getWeekDateRange(week);
+        weekInfos.map(weekInfo => {
+          const weekData = loc.weeks[weekInfo.dateKey] || { blastersReturned: 0, vestsReturned: 0, batteriesReturned: 0 };
           return {
             location: loc.name,
-            week: week,
-            weekDateRange: weekDateRange,
+            weekStartDate: weekInfo.dateKey, // ISO format: YYYY-MM-DD
+            weekEndDate: weekInfo.endDate.toISOString().split('T')[0],
             blastersReturned: weekData.blastersReturned,
             vestsReturned: weekData.vestsReturned,
             batteriesReturned: weekData.batteriesReturned,
@@ -217,7 +246,7 @@ export default function UnifiedAdmin() {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, locationName: string, week?: number, field?: keyof WeekData) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, locationName: string, dateKey?: string, field?: keyof WeekData) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       handleSave(true); // Silent save
@@ -239,11 +268,13 @@ export default function UnifiedAdmin() {
     e.target.select();
   };
 
-  const getWeekDateRange = (week: number): string => {
-    return weekRanges[week - 1] || '';
+  const getWeekDateRange = (dateKey: string): string => {
+    const weekInfo = weekInfos.find(w => w.dateKey === dateKey);
+    if (!weekInfo) return '';
+    return `${weekInfo.startDate.toLocaleDateString()} - ${weekInfo.endDate.toLocaleDateString()}`;
   };
 
-  const currentWeek = getCurrentWeek();
+  const currentWeek = getCurrentWeekIndex();
 
   if (loading) {
     return (
@@ -254,6 +285,7 @@ export default function UnifiedAdmin() {
   }
 
   const totalReserve = calculateReserve();
+  const weeks = weekInfos.map(w => w.dateKey);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-900 via-black to-pink-900 p-4">
@@ -325,12 +357,12 @@ export default function UnifiedAdmin() {
                   <th className="p-2 text-center bg-gradient-to-r from-green-600 to-green-700 text-white border border-green-400/50">
                     INVENTORY
                   </th>
-                  {weeks.map(week => {
-                    const isCurrentWeek = week === currentWeek;
+                  {weekInfos.map((weekInfo, weekIndex) => {
+                    const isCurrentWeek = weekIndex === getCurrentWeekIndex();
                     return (
                       <th
-                        key={week}
-                        id={`week-${week}`}
+                        key={weekInfo.dateKey}
+                        id={`week-${weekInfo.dateKey}`}
                         colSpan={3}
                         className={`p-2 text-center border ${
                           isCurrentWeek
@@ -339,7 +371,7 @@ export default function UnifiedAdmin() {
                         }`}
                       >
                         {isCurrentWeek && <div className="text-[8px] text-cyan-200 font-bold mb-1">← CURRENT WEEK</div>}
-                        <div className="text-sm font-bold">{getWeekDateRange(week)}</div>
+                        <div className="text-sm font-bold">{formatDateRange(weekInfo.startDate, weekInfo.endDate)}</div>
                       </th>
                     );
                   })}
@@ -347,18 +379,18 @@ export default function UnifiedAdmin() {
                 <tr>
                   <th className="p-1 bg-purple-800/80 text-purple-300 border border-purple-400/30 sticky left-0 z-20"></th>
                   <th className="p-1 bg-green-800/80 text-green-300 border border-green-400/30"></th>
-                  {weeks.map(week => {
-                    const isCurrentWeek = week === currentWeek;
+                  {weekInfos.map((weekInfo, weekIndex) => {
+                    const isCurrentWeek = weekIndex === currentWeek;
                     const bgClass = isCurrentWeek ? 'bg-cyan-800/80 text-cyan-300 border-cyan-400/30' : 'bg-pink-800/80 text-pink-300 border-pink-400/30';
                     return (
                       <>
-                        <th key={`${week}-b`} className={`p-1 text-center ${bgClass} text-[10px]`}>
+                        <th key={`${weekInfo.dateKey}-b`} className={`p-1 text-center ${bgClass} text-[10px]`}>
                           BLST
                         </th>
-                        <th key={`${week}-v`} className={`p-1 text-center ${bgClass} text-[10px]`}>
+                        <th key={`${weekInfo.dateKey}-v`} className={`p-1 text-center ${bgClass} text-[10px]`}>
                           VEST
                         </th>
-                        <th key={`${week}-bat`} className={`p-1 text-center ${bgClass} text-[10px]`}>
+                        <th key={`${weekInfo.dateKey}-bat`} className={`p-1 text-center ${bgClass} text-[10px]`}>
                           BATT
                         </th>
                       </>
