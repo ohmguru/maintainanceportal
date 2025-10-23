@@ -1,0 +1,175 @@
+{
+  "lastUpdated": "2025-10-23T15:17:24.388Z",
+  "allocationBase": 90,
+  "totalReserve1": 284,
+  "locations": [
+    {
+      "location": "Atlanta",
+      "weeklyFailureRate": 5,
+      "actualInventory": 90,
+      "allocationBase": 90,
+      "excessBatteries": 0
+    },
+    {
+      "location": "Austin",
+      "weeklyFailureRate": 5,
+      "actualInventory": 103,
+      "allocationBase": 90,
+      "excessBatteries": 13
+    },
+    {
+      "location": "Avondale",
+      "weeklyFailureRate": 5,
+      "actualInventory": 88,
+      "allocationBase": 90,
+      "excessBatteries": 0
+    },
+    {
+      "location": "Beaumont",
+      "weeklyFailureRate": 25,
+      "actualInventory": 80,
+      "allocationBase": 90,
+      "excessBatteries": 0
+    },
+    {
+      "location": "Gilbert",
+      "weeklyFailureRate": 5,
+      "actualInventory": 87,
+      "allocationBase": 90,
+      "excessBatteries": 0
+    },
+    {
+      "location": "Grand Prairie",
+      "weeklyFailureRate": 7,
+      "actualInventory": 104,
+      "allocationBase": 90,
+      "excessBatteries": 14
+    },
+    {
+      "location": "Greensboro",
+      "weeklyFailureRate": 5,
+      "actualInventory": 117,
+      "allocationBase": 90,
+      "excessBatteries": 27
+    },
+    {
+      "location": "Hoffman Estates",
+      "weeklyFailureRate": 13,
+      "actualInventory": 96,
+      "allocationBase": 90,
+      "excessBatteries": 6
+    },
+    {
+      "location": "Humble",
+      "weeklyFailureRate": 5,
+      "actualInventory": 91,
+      "allocationBase": 90,
+      "excessBatteries": 1
+    },
+    {
+      "location": "Independence",
+      "weeklyFailureRate": 5,
+      "actualInventory": 117,
+      "allocationBase": 90,
+      "excessBatteries": 27
+    },
+    {
+      "location": "Knoxville",
+      "weeklyFailureRate": 5,
+      "actualInventory": 89,
+      "allocationBase": 90,
+      "excessBatteries": 0
+    },
+    {
+      "location": "Louisville",
+      "weeklyFailureRate": 5,
+      "actualInventory": 105,
+      "allocationBase": 90,
+      "excessBatteries": 15
+    },
+    {
+      "location": "Montclair",
+      "weeklyFailureRate": 5,
+      "actualInventory": 112,
+      "allocationBase": 90,
+      "excessBatteries": 22
+    },
+    {
+      "location": "Norman",
+      "weeklyFailureRate": 5,
+      "actualInventory": 95,
+      "allocationBase": 90,
+      "excessBatteries": 5
+    },
+    {
+      "location": "Oklahoma City",
+      "weeklyFailureRate": 5,
+      "actualInventory": 90,
+      "allocationBase": 90,
+      "excessBatteries": 0
+    },
+    {
+      "location": "Olathe",
+      "weeklyFailureRate": 5,
+      "actualInventory": 108,
+      "allocationBase": 90,
+      "excessBatteries": 18
+    },
+    {
+      "location": "Orlando",
+      "weeklyFailureRate": 7,
+      "actualInventory": 139,
+      "allocationBase": 90,
+      "excessBatteries": 49
+    },
+    {
+      "location": "San Antonio North",
+      "weeklyFailureRate": 5,
+      "actualInventory": 97,
+      "allocationBase": 90,
+      "excessBatteries": 7
+    },
+    {
+      "location": "SAW",
+      "weeklyFailureRate": 20,
+      "actualInventory": 77,
+      "allocationBase": 90,
+      "excessBatteries": 0
+    },
+    {
+      "location": "Shenandoah",
+      "weeklyFailureRate": 5,
+      "actualInventory": 90,
+      "allocationBase": 90,
+      "excessBatteries": 0
+    },
+    {
+      "location": "Taylor",
+      "weeklyFailureRate": 5,
+      "actualInventory": 104,
+      "allocationBase": 90,
+      "excessBatteries": 14
+    },
+    {
+      "location": "Tempe",
+      "weeklyFailureRate": 5,
+      "actualInventory": 85,
+      "allocationBase": 90,
+      "excessBatteries": 0
+    },
+    {
+      "location": "Tulsa",
+      "weeklyFailureRate": 5,
+      "actualInventory": 112,
+      "allocationBase": 90,
+      "excessBatteries": 22
+    },
+    {
+      "location": "Wesley Chapel",
+      "weeklyFailureRate": 8,
+      "actualInventory": 134,
+      "allocationBase": 90,
+      "excessBatteries": 44
+    }
+  ]
+}

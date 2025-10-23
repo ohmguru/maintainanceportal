@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { locations, Location } from '@/data/locations';
+import BatteryReserveIndicator from '@/components/BatteryReserveIndicator';
 
 type SortField = 'composite' | 'blaster' | 'vest' | 'batteries';
 type SortDirection = 'asc' | 'desc';
@@ -83,14 +84,20 @@ export default function Home() {
       }}></div>
 
       <div className="flex-none relative z-10">
-        <header className="text-center mb-2">
-          <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 tracking-wider uppercase" style={{
-            textShadow: '0 0 20px rgba(236,72,153,0.5), 0 0 40px rgba(236,72,153,0.3)',
-            fontFamily: 'monospace'
-          }}>
-            ⚡ MainEvent Fleet Reliability ⚡
-          </h1>
-        </header>
+        <div className="flex justify-between items-center mb-2">
+          <div className="flex-1"></div>
+          <header className="text-center flex-1">
+            <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 tracking-wider uppercase" style={{
+              textShadow: '0 0 20px rgba(236,72,153,0.5), 0 0 40px rgba(236,72,153,0.3)',
+              fontFamily: 'monospace'
+            }}>
+              ⚡ MainEvent Fleet Reliability ⚡
+            </h1>
+          </header>
+          <div className="flex-1 flex justify-end">
+            <BatteryReserveIndicator />
+          </div>
+        </div>
       </div>
 
       <div className="flex-1 min-h-0 flex flex-col relative z-10">
