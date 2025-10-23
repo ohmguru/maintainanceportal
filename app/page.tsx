@@ -98,51 +98,48 @@ export default function Home() {
             <table className="w-full text-xs" style={{ fontFamily: 'monospace' }}>
               <thead className="sticky top-0 z-10">
                 <tr>
-                  <th className="py-1.5 px-3 text-left font-bold bg-gradient-to-r from-purple-600 to-purple-700 text-cyan-300 border-b-2 border-cyan-400/50 uppercase tracking-wider">Location</th>
-                  <th colSpan={4} className="py-1.5 px-2 text-center font-bold bg-gradient-to-r from-purple-600 to-purple-700 text-pink-300 border-b-2 border-pink-400/50 uppercase tracking-wider border-l-2 border-pink-400/30">Rankings</th>
-                  <th colSpan={3} className="py-1.5 px-2 text-center font-bold bg-gradient-to-r from-purple-600 to-purple-700 text-cyan-300 border-b-2 border-cyan-400/50 uppercase tracking-wider border-l-2 border-cyan-400/30">Fleet Health %</th>
-                </tr>
-                <tr>
-                  <th className="py-1 px-3 text-left font-semibold bg-purple-800/80 text-cyan-400 border-b border-cyan-400/30"></th>
-                  <th
-                    className="py-1 px-2 text-center font-semibold cursor-pointer bg-purple-800/80 text-pink-400 hover:bg-purple-700/80 transition-all border-b border-pink-400/30 border-l border-pink-400/20"
-                    onClick={() => handleSort('composite')}
-                  >
-                    <div className="flex items-center justify-center gap-1">
+                  <th rowSpan={2} className="py-1.5 px-3 text-left font-bold bg-gradient-to-r from-purple-600 to-purple-700 text-cyan-300 border-b-2 border-cyan-400/50 uppercase tracking-wider">Location</th>
+                  <th rowSpan={2} className="py-1.5 px-2 text-center font-bold bg-gradient-to-r from-purple-600 to-purple-700 text-pink-300 border-b-2 border-pink-400/50 uppercase tracking-wider border-l-2 border-pink-400/30">
+                    <div className="flex flex-col items-center gap-0.5">
                       <span>Overall</span>
-                      <span className="text-xs">{getSortIcon('composite')}</span>
+                      <span className="text-[9px] opacity-80">Rank</span>
                     </div>
                   </th>
+                  <th colSpan={2} className="py-1 px-2 text-center font-bold bg-gradient-to-r from-purple-600 to-purple-700 text-pink-300 border-b border-pink-400/50 uppercase tracking-wider border-l-2 border-pink-400/30">Blaster</th>
+                  <th colSpan={2} className="py-1 px-2 text-center font-bold bg-gradient-to-r from-purple-600 to-purple-700 text-pink-300 border-b border-pink-400/50 uppercase tracking-wider border-l-2 border-pink-400/30">Vest</th>
+                  <th colSpan={2} className="py-1 px-2 text-center font-bold bg-gradient-to-r from-purple-600 to-purple-700 text-pink-300 border-b border-pink-400/50 uppercase tracking-wider border-l-2 border-pink-400/30">Battery</th>
+                </tr>
+                <tr>
                   <th
-                    className="py-1 px-2 text-center font-semibold cursor-pointer bg-purple-800/80 text-pink-400 hover:bg-purple-700/80 transition-all border-b border-pink-400/30 border-l border-pink-400/20"
+                    className="py-1 px-2 text-center font-semibold cursor-pointer bg-purple-800/80 text-pink-400 hover:bg-purple-700/80 transition-all border-b border-pink-400/30 border-l-2 border-pink-400/30"
                     onClick={() => handleSort('blaster')}
                   >
                     <div className="flex items-center justify-center gap-1">
-                      <span>Blaster</span>
+                      <span>Rank</span>
                       <span className="text-xs">{getSortIcon('blaster')}</span>
                     </div>
                   </th>
+                  <th className="py-1 px-2 text-center font-semibold bg-purple-800/80 text-cyan-400 border-b border-cyan-400/30 border-r-2 border-pink-400/30">Health %</th>
                   <th
-                    className="py-1 px-2 text-center font-semibold cursor-pointer bg-purple-800/80 text-pink-400 hover:bg-purple-700/80 transition-all border-b border-pink-400/30 border-l border-pink-400/20"
+                    className="py-1 px-2 text-center font-semibold cursor-pointer bg-purple-800/80 text-pink-400 hover:bg-purple-700/80 transition-all border-b border-pink-400/30 border-l-2 border-pink-400/30"
                     onClick={() => handleSort('vest')}
                   >
                     <div className="flex items-center justify-center gap-1">
-                      <span>Vest</span>
+                      <span>Rank</span>
                       <span className="text-xs">{getSortIcon('vest')}</span>
                     </div>
                   </th>
+                  <th className="py-1 px-2 text-center font-semibold bg-purple-800/80 text-cyan-400 border-b border-cyan-400/30 border-r-2 border-pink-400/30">Health %</th>
                   <th
-                    className="py-1 px-2 text-center font-semibold cursor-pointer bg-purple-800/80 text-pink-400 hover:bg-purple-700/80 transition-all border-b border-pink-400/30 border-l border-pink-400/20"
+                    className="py-1 px-2 text-center font-semibold cursor-pointer bg-purple-800/80 text-pink-400 hover:bg-purple-700/80 transition-all border-b border-pink-400/30 border-l-2 border-pink-400/30"
                     onClick={() => handleSort('batteries')}
                   >
                     <div className="flex items-center justify-center gap-1">
-                      <span>Battery</span>
+                      <span>Rank</span>
                       <span className="text-xs">{getSortIcon('batteries')}</span>
                     </div>
                   </th>
-                  <th className="py-1 px-2 text-center font-semibold bg-purple-800/80 text-cyan-400 border-b border-cyan-400/30 border-l-2 border-cyan-400/30">Blaster</th>
-                  <th className="py-1 px-2 text-center font-semibold bg-purple-800/80 text-cyan-400 border-b border-cyan-400/30 border-l border-cyan-400/20">Vest</th>
-                  <th className="py-1 px-2 text-center font-semibold bg-purple-800/80 text-cyan-400 border-b border-cyan-400/30 border-l border-cyan-400/20">Battery</th>
+                  <th className="py-1 px-2 text-center font-semibold bg-purple-800/80 text-cyan-400 border-b border-cyan-400/30">Health %</th>
                 </tr>
               </thead>
               <tbody>
@@ -156,33 +153,33 @@ export default function Home() {
                     <td className="py-1 px-3 font-bold text-cyan-300">
                       {location.name}
                     </td>
-                    <td className="py-1 px-2 text-center border-l border-pink-400/20">
+                    <td className="py-1 px-2 text-center border-l-2 border-pink-400/30">
                       <span className={`inline-flex items-center justify-center w-6 h-6 rounded font-bold text-xs ${getRankBadgeColor(location.compositeRank)}`}>
                         {location.compositeRank}
                       </span>
                     </td>
-                    <td className="py-1 px-2 text-center border-l border-pink-400/20">
+                    <td className="py-1 px-2 text-center border-l-2 border-pink-400/30">
                       <span className={`inline-flex items-center justify-center w-6 h-6 rounded font-semibold text-xs ${getRankBadgeColor(location.blasterRank)}`}>
                         {location.blasterRank}
                       </span>
                     </td>
-                    <td className="py-1 px-2 text-center border-l border-pink-400/20">
+                    <td className={`py-1 px-2 text-center font-bold border-r-2 border-pink-400/30 ${getHealthColor(location.blasterPercentile)}`}>
+                      {location.blasterPercentile}%
+                    </td>
+                    <td className="py-1 px-2 text-center border-l-2 border-pink-400/30">
                       <span className={`inline-flex items-center justify-center w-6 h-6 rounded font-semibold text-xs ${getRankBadgeColor(location.vestRank)}`}>
                         {location.vestRank}
                       </span>
                     </td>
-                    <td className="py-1 px-2 text-center border-l border-pink-400/20">
+                    <td className={`py-1 px-2 text-center font-bold border-r-2 border-pink-400/30 ${getHealthColor(location.vestPercentile)}`}>
+                      {location.vestPercentile}%
+                    </td>
+                    <td className="py-1 px-2 text-center border-l-2 border-pink-400/30">
                       <span className={`inline-flex items-center justify-center w-6 h-6 rounded font-semibold text-xs ${getRankBadgeColor(location.batteriesRank)}`}>
                         {location.batteriesRank}
                       </span>
                     </td>
-                    <td className={`py-1 px-2 text-center font-bold border-l-2 border-cyan-400/30 ${getHealthColor(location.blasterPercentile)}`}>
-                      {location.blasterPercentile}%
-                    </td>
-                    <td className={`py-1 px-2 text-center font-bold border-l border-cyan-400/20 ${getHealthColor(location.vestPercentile)}`}>
-                      {location.vestPercentile}%
-                    </td>
-                    <td className={`py-1 px-2 text-center font-bold border-l border-cyan-400/20 ${getHealthColor(location.batteriesPercentile)}`}>
+                    <td className={`py-1 px-2 text-center font-bold ${getHealthColor(location.batteriesPercentile)}`}>
                       {location.batteriesPercentile}%
                     </td>
                   </tr>
