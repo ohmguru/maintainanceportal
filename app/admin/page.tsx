@@ -37,28 +37,21 @@ export default function UnifiedAdmin() {
       setAllocationBase(inventoryData.allocationBase || 90);
       setFinalEmergencyReserve(inventoryData.finalEmergencyReserve || 142);
 
-      // Load weekly returns from CSV
-      const csvRes = await fetch('/data/weeklyReturns.csv');
-      const csvText = await csvRes.text();
-      const lines = csvText.split('\n').slice(1).filter(line => line.trim());
+      // Load weekly returns from blob storage
+      const weeklyRes = await fetch('/api/weekly-returns');
+      const weeklyData = await weeklyRes.json();
+      const returns = weeklyData.returns || [];
 
       const weeklyReturns: Record<string, Record<number, WeekData>> = {};
 
-      lines.forEach(line => {
-        const values = line.match(/(".*?"|[^,]+)(?=\s*,|\s*$)/g) || [];
-        const location = values[0]?.replace(/"/g, '') || '';
-        const week = parseInt(values[1] || '0');
-        const blastersReturned = parseFloat(values[3] || '0');
-        const vestsReturned = parseFloat(values[4] || '0');
-        const batteriesReturned = parseFloat(values[5] || '0');
-
-        if (!weeklyReturns[location]) {
-          weeklyReturns[location] = {};
+      returns.forEach((r: any) => {
+        if (!weeklyReturns[r.location]) {
+          weeklyReturns[r.location] = {};
         }
-        weeklyReturns[location][week] = {
-          blastersReturned,
-          vestsReturned,
-          batteriesReturned
+        weeklyReturns[r.location][r.week] = {
+          blastersReturned: r.blastersReturned || 0,
+          vestsReturned: r.vestsReturned || 0,
+          batteriesReturned: r.batteriesReturned || 0
         };
       });
 
@@ -120,12 +113,12 @@ export default function UnifiedAdmin() {
     return data.reduce((sum, loc) => sum + Math.max(0, loc.inventory - allocationBase), 0);
   };
 
-  const handleSave = async () => {
+  const handleSave = async (silent = false) => {
     setSaving(true);
     try {
       const reserve = calculateReserve();
 
-      // Save battery inventory
+      // Save battery inventory to blob
       const inventoryPayload = {
         allocationBase,
         totalReserve1: reserve,
@@ -145,30 +138,57 @@ export default function UnifiedAdmin() {
         body: JSON.stringify(inventoryPayload)
       });
 
-      // Generate CSV for weekly returns
-      const csvHeaders = 'location,week,weekDateRange,blastersReturned,vestsReturned,batteriesReturned,players\n';
-      const csvRows = data.flatMap(loc =>
+      // Save weekly returns to blob
+      const weeklyReturns = data.flatMap(loc =>
         weeks.map(week => {
           const weekData = loc.weeks[week] || { blastersReturned: 0, vestsReturned: 0, batteriesReturned: 0 };
           const weekDateRange = getWeekDateRange(week);
-          return `"${loc.name}",${week},"${weekDateRange}",${weekData.blastersReturned},${weekData.vestsReturned},${weekData.batteriesReturned},0`;
+          return {
+            location: loc.name,
+            week: week,
+            weekDateRange: weekDateRange,
+            blastersReturned: weekData.blastersReturned,
+            vestsReturned: weekData.vestsReturned,
+            batteriesReturned: weekData.batteriesReturned,
+            players: 0
+          };
         })
-      ).join('\n');
+      );
 
-      // Download CSV (since we can't write to public files directly)
-      const blob = new Blob([csvHeaders + csvRows], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'weeklyReturns.csv';
-      a.click();
+      await fetch('/api/weekly-returns', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ returns: weeklyReturns })
+      });
 
-      alert('✅ Battery inventory saved to Netlify Blob!\n📥 Weekly returns CSV downloaded - please replace data/weeklyReturns.csv');
+      if (!silent) {
+        alert('✅ All data saved to Netlify Blob Storage!');
+      }
     } catch (error) {
       console.error('Save failed:', error);
-      alert('❌ Error saving data');
+      if (!silent) {
+        alert('❌ Error saving data');
+      }
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, locationName: string, week?: number, field?: keyof WeekData) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSave(true); // Silent save
+
+      // Move to next row
+      const currentInput = e.target as HTMLInputElement;
+      const allInputs = Array.from(document.querySelectorAll('input[type="number"]'));
+      const currentIndex = allInputs.indexOf(currentInput);
+
+      if (currentIndex >= 0 && currentIndex < allInputs.length - 1) {
+        const nextInput = allInputs[currentIndex + 1] as HTMLInputElement;
+        nextInput?.focus();
+        nextInput?.select();
+      }
     }
   };
 
@@ -296,6 +316,7 @@ export default function UnifiedAdmin() {
                         type="number"
                         value={loc.inventory}
                         onChange={(e) => handleInventoryChange(loc.name, parseInt(e.target.value) || 0)}
+                        onKeyDown={(e) => handleKeyDown(e, loc.name)}
                         className="w-16 text-center bg-black/60 border border-green-400/50 rounded px-1 py-1 text-green-300 font-bold focus:border-green-400 focus:outline-none"
                       />
                     </td>
@@ -308,6 +329,7 @@ export default function UnifiedAdmin() {
                               type="number"
                               value={weekData.blastersReturned}
                               onChange={(e) => handleWeekDataChange(loc.name, week, 'blastersReturned', parseFloat(e.target.value) || 0)}
+                              onKeyDown={(e) => handleKeyDown(e, loc.name, week, 'blastersReturned')}
                               className="w-12 text-center bg-black/60 border border-pink-400/30 rounded px-1 text-pink-300 text-xs focus:border-pink-400 focus:outline-none"
                             />
                           </td>
@@ -316,6 +338,7 @@ export default function UnifiedAdmin() {
                               type="number"
                               value={weekData.vestsReturned}
                               onChange={(e) => handleWeekDataChange(loc.name, week, 'vestsReturned', parseFloat(e.target.value) || 0)}
+                              onKeyDown={(e) => handleKeyDown(e, loc.name, week, 'vestsReturned')}
                               className="w-12 text-center bg-black/60 border border-pink-400/30 rounded px-1 text-pink-300 text-xs focus:border-pink-400 focus:outline-none"
                             />
                           </td>
@@ -325,6 +348,7 @@ export default function UnifiedAdmin() {
                               step="0.1"
                               value={weekData.batteriesReturned}
                               onChange={(e) => handleWeekDataChange(loc.name, week, 'batteriesReturned', parseFloat(e.target.value) || 0)}
+                              onKeyDown={(e) => handleKeyDown(e, loc.name, week, 'batteriesReturned')}
                               className="w-12 text-center bg-black/60 border border-pink-400/30 rounded px-1 text-pink-300 text-xs focus:border-pink-400 focus:outline-none"
                             />
                           </td>
