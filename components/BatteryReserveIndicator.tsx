@@ -50,7 +50,7 @@ export default function BatteryReserveIndicator() {
   return (
     <div className="flex items-center gap-3 px-4 py-2 bg-black/60 backdrop-blur-sm rounded-lg border-2 border-cyan-500/50 shadow-[0_0_15px_rgba(34,211,238,0.3)]">
       <div className="flex flex-col border-r border-cyan-500/30 pr-3">
-        <span className="text-[9px] text-cyan-400 font-bold uppercase tracking-wider">Reserve 1 (Excess)</span>
+        <span className="text-[9px] text-cyan-400 font-bold uppercase tracking-wider">Primary Reserve</span>
         <div className="flex items-baseline gap-1">
           <span className={`text-xl font-bold ${getReserveColor(reserve1 || 0)} font-mono`}>
             {reserve1}
@@ -58,7 +58,7 @@ export default function BatteryReserveIndicator() {
         </div>
       </div>
       <div className="flex flex-col border-r border-purple-500/30 pr-3">
-        <span className="text-[9px] text-purple-400 font-bold uppercase tracking-wider">Final Emergency</span>
+        <span className="text-[9px] text-purple-400 font-bold uppercase tracking-wider">Final Emergency Reserve</span>
         <div className="flex items-baseline gap-1">
           <span className="text-xl font-bold text-purple-300 font-mono">
             {finalReserve}
@@ -72,15 +72,6 @@ export default function BatteryReserveIndicator() {
             {totalReserve}
           </span>
         </div>
-      </div>
-      <div className={`px-2 py-1 rounded text-[9px] font-bold ${
-        totalReserve >= 350
-          ? 'bg-green-500/20 text-green-300 border border-green-400/50'
-          : totalReserve >= 250
-          ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-400/50'
-          : 'bg-red-500/20 text-red-300 border border-red-400/50'
-      }`}>
-        {getReserveStatus(totalReserve)}
       </div>
     </div>
   );
