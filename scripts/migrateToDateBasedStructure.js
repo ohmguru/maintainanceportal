@@ -10,7 +10,7 @@ const fs = require('fs');
 const https = require('https');
 
 const PROD_URL = 'https://mechwarrior.netlify.app/api/weekly-returns';
-const PROJECT_START_DATE = new Date('2024-06-08'); // June 8, 2024
+const PROJECT_START_DATE = new Date('2025-06-08'); // June 8, 2025
 
 console.log('🔄 Migrating to date-based structure\n');
 

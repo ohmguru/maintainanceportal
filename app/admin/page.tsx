@@ -28,8 +28,8 @@ export default function UnifiedAdmin() {
   const [allocationBase, setAllocationBase] = useState(90);
   const [finalEmergencyReserve, setFinalEmergencyReserve] = useState(142);
 
-  // Generate weeks from start date (June 8, 2024) through end of 2025
-  const projectStartDate = new Date('2024-06-08');
+  // Generate weeks from start date (June 8, 2025) through end of 2025
+  const projectStartDate = new Date('2025-06-08');
   const projectEndDate = new Date('2025-12-31');
   const weekInfos: WeekInfo[] = [];
 
