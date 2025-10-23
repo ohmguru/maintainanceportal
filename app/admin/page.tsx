@@ -89,12 +89,12 @@ export default function UnifiedAdmin() {
 
   useEffect(() => {
     if (!loading && data.length > 0) {
-      // Auto-scroll to current week after data loads
+      // Auto-scroll to center current week after data loads
       const currentWeekIdx = getCurrentWeekIndex();
       const currentWeekDateKey = weekInfos[currentWeekIdx]?.dateKey;
       const currentWeekHeader = document.getElementById(`week-${currentWeekDateKey}`);
       if (currentWeekHeader) {
-        currentWeekHeader.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+        currentWeekHeader.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
       }
     }
   }, [loading, data]);
@@ -350,10 +350,10 @@ export default function UnifiedAdmin() {
             <table className="w-full text-xs border-collapse font-mono">
               <thead className="sticky top-0 z-10">
                 <tr>
-                  <th className="p-2 text-left bg-gradient-to-r from-purple-600 to-purple-700 text-cyan-300 border border-cyan-400/50 sticky left-0 z-20">
+                  <th className="p-2 text-left bg-gradient-to-r from-purple-600 to-purple-700 text-cyan-300 border border-cyan-400/50 sticky left-0 z-20 min-w-[250px]">
                     LOCATION
                   </th>
-                  <th className="p-2 text-center bg-gradient-to-r from-green-600 to-green-700 text-white border border-green-400/50">
+                  <th className="p-2 text-center bg-gradient-to-r from-green-600 to-green-700 text-white border border-green-400/50 sticky left-[250px] z-20 min-w-[120px]">
                     INVENTORY
                   </th>
                   {weekInfos.map((weekInfo, weekIndex) => {
@@ -376,8 +376,8 @@ export default function UnifiedAdmin() {
                   })}
                 </tr>
                 <tr>
-                  <th className="p-1 bg-purple-800/80 text-purple-300 border border-purple-400/30 sticky left-0 z-20"></th>
-                  <th className="p-1 bg-green-800/80 text-green-300 border border-green-400/30"></th>
+                  <th className="p-1 bg-purple-800/80 text-purple-300 border border-purple-400/30 sticky left-0 z-20 min-w-[250px]"></th>
+                  <th className="p-1 bg-green-800/80 text-green-300 border border-green-400/30 sticky left-[250px] z-20 min-w-[120px]"></th>
                   {weekInfos.map((weekInfo, weekIndex) => {
                     const isCurrentWeek = weekIndex === currentWeek;
                     const bgClass = isCurrentWeek ? 'bg-cyan-800/80 text-cyan-300 border-cyan-400/30' : 'bg-pink-800/80 text-pink-300 border-pink-400/30';
@@ -400,10 +400,10 @@ export default function UnifiedAdmin() {
               <tbody>
                 {data.map((loc, idx) => (
                   <tr key={loc.name} className={idx % 2 === 0 ? 'bg-black/40' : 'bg-purple-900/20'}>
-                    <td className="p-2 font-bold text-cyan-300 border border-purple-500/20 sticky left-0 z-10 bg-inherit">
+                    <td className="p-2 font-bold text-cyan-300 border border-purple-500/20 sticky left-0 z-10 bg-inherit min-w-[250px]">
                       {loc.name}
                     </td>
-                    <td className="p-1 text-center border border-green-500/20">
+                    <td className="p-1 text-center border border-green-500/20 sticky left-[250px] z-10 bg-inherit min-w-[120px]">
                       <input
                         type="number"
                         value={loc.inventory}
