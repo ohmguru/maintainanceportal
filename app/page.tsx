@@ -64,66 +64,59 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
-      <div className="max-w-7xl mx-auto">
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+    <div className="h-screen flex flex-col bg-gradient-to-br from-blue-50 to-indigo-100 p-2 overflow-hidden">
+      <div className="flex-none">
+        <header className="text-center mb-2">
+          <h1 className="text-2xl font-bold text-gray-900">
             MainEvent Location Reliability Leaderboard
           </h1>
-          <p className="text-gray-600">
-            Track performance rankings for Blaster, Vest, and Battery reliability
-          </p>
         </header>
+      </div>
 
-        <div className="bg-white rounded-lg shadow-xl overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+      <div className="flex-1 min-h-0 flex flex-col">
+        <div className="bg-white rounded-lg shadow-xl overflow-hidden flex-1 flex flex-col">
+          <div className="flex-1 overflow-auto">
+            <table className="w-full text-xs">
+              <thead className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white sticky top-0 z-10">
                 <tr>
-                  <th className="py-4 px-6 text-left font-semibold">Location</th>
+                  <th className="py-2 px-3 text-left font-semibold">Location</th>
                   <th
-                    className="py-4 px-4 text-center font-semibold cursor-pointer hover:bg-blue-700 transition-colors"
+                    className="py-2 px-2 text-center font-semibold cursor-pointer hover:bg-blue-700 transition-colors"
                     onClick={() => handleSort('composite')}
                   >
-                    <div className="flex items-center justify-center gap-2">
-                      <span>Overall Rank</span>
-                      <span className="text-lg">{getSortIcon('composite')}</span>
-                    </div>
-                    <div className="text-xs font-normal mt-1 opacity-90">
-                      Composite
+                    <div className="flex items-center justify-center gap-1">
+                      <span>Overall</span>
+                      <span>{getSortIcon('composite')}</span>
                     </div>
                   </th>
                   <th
-                    className="py-4 px-4 text-center font-semibold cursor-pointer hover:bg-blue-700 transition-colors"
+                    className="py-2 px-2 text-center font-semibold cursor-pointer hover:bg-blue-700 transition-colors"
                     onClick={() => handleSort('blaster')}
                   >
-                    <div className="flex items-center justify-center gap-2">
-                      <span>Blaster Rank</span>
-                      <span className="text-lg">{getSortIcon('blaster')}</span>
-                    </div>
-                    <div className="text-xs font-normal mt-1 opacity-90">
-                      {locations.find(l => l.name === sortedLocations[0].name)?.blaster.toFixed(1)}
+                    <div className="flex items-center justify-center gap-1">
+                      <span>Blaster</span>
+                      <span>{getSortIcon('blaster')}</span>
                     </div>
                   </th>
                   <th
-                    className="py-4 px-4 text-center font-semibold cursor-pointer hover:bg-blue-700 transition-colors"
+                    className="py-2 px-2 text-center font-semibold cursor-pointer hover:bg-blue-700 transition-colors"
                     onClick={() => handleSort('vest')}
                   >
-                    <div className="flex items-center justify-center gap-2">
-                      <span>Vest Rank</span>
-                      <span className="text-lg">{getSortIcon('vest')}</span>
+                    <div className="flex items-center justify-center gap-1">
+                      <span>Vest</span>
+                      <span>{getSortIcon('vest')}</span>
                     </div>
                   </th>
                   <th
-                    className="py-4 px-4 text-center font-semibold cursor-pointer hover:bg-blue-700 transition-colors"
+                    className="py-2 px-2 text-center font-semibold cursor-pointer hover:bg-blue-700 transition-colors"
                     onClick={() => handleSort('batteries')}
                   >
-                    <div className="flex items-center justify-center gap-2">
-                      <span>Battery Rank</span>
-                      <span className="text-lg">{getSortIcon('batteries')}</span>
+                    <div className="flex items-center justify-center gap-1">
+                      <span>Battery</span>
+                      <span>{getSortIcon('batteries')}</span>
                     </div>
                   </th>
-                  <th className="py-4 px-4 text-center font-semibold">
+                  <th className="py-2 px-2 text-center font-semibold">
                     Percentiles
                   </th>
                 </tr>
@@ -136,55 +129,54 @@ export default function Home() {
                       index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
                     }`}
                   >
-                    <td className="py-4 px-6 font-medium text-gray-900">
+                    <td className="py-1.5 px-3 font-medium text-gray-900">
                       {location.name}
                     </td>
-                    <td className="py-4 px-4 text-center">
-                      <span className={`inline-flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg ${getRankBadgeColor(location.compositeRank)}`}>
-                        {location.compositeRank}
-                      </span>
-                      <div className="text-xs text-gray-500 mt-1">
-                        {location.compositePercentile}%
+                    <td className="py-1.5 px-2 text-center">
+                      <div className="flex flex-col items-center gap-0.5">
+                        <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full font-bold text-sm ${getRankBadgeColor(location.compositeRank)}`}>
+                          {location.compositeRank}
+                        </span>
+                        <span className="text-[10px] text-gray-500">
+                          {location.compositePercentile}%
+                        </span>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-center">
-                      <span className={`inline-flex items-center justify-center w-10 h-10 rounded-full font-semibold ${getRankBadgeColor(location.blasterRank)}`}>
-                        {location.blasterRank}
-                      </span>
-                      <div className="text-xs text-gray-500 mt-1">
-                        {location.blaster.toFixed(1)}
+                    <td className="py-1.5 px-2 text-center">
+                      <div className="flex flex-col items-center gap-0.5">
+                        <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full font-semibold text-xs ${getRankBadgeColor(location.blasterRank)}`}>
+                          {location.blasterRank}
+                        </span>
+                        <span className="text-[10px] text-gray-500">
+                          {location.blaster.toFixed(0)}
+                        </span>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-center">
-                      <span className={`inline-flex items-center justify-center w-10 h-10 rounded-full font-semibold ${getRankBadgeColor(location.vestRank)}`}>
-                        {location.vestRank}
-                      </span>
-                      <div className="text-xs text-gray-500 mt-1">
-                        {location.vest.toFixed(1)}
+                    <td className="py-1.5 px-2 text-center">
+                      <div className="flex flex-col items-center gap-0.5">
+                        <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full font-semibold text-xs ${getRankBadgeColor(location.vestRank)}`}>
+                          {location.vestRank}
+                        </span>
+                        <span className="text-[10px] text-gray-500">
+                          {location.vest.toFixed(0)}
+                        </span>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-center">
-                      <span className={`inline-flex items-center justify-center w-10 h-10 rounded-full font-semibold ${getRankBadgeColor(location.batteriesRank)}`}>
-                        {location.batteriesRank}
-                      </span>
-                      <div className="text-xs text-gray-500 mt-1">
-                        {location.batteries.toFixed(1)}
+                    <td className="py-1.5 px-2 text-center">
+                      <div className="flex flex-col items-center gap-0.5">
+                        <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full font-semibold text-xs ${getRankBadgeColor(location.batteriesRank)}`}>
+                          {location.batteriesRank}
+                        </span>
+                        <span className="text-[10px] text-gray-500">
+                          {location.batteries.toFixed(0)}
+                        </span>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-center">
-                      <div className="text-sm space-y-1">
-                        <div className="flex justify-between items-center gap-2">
-                          <span className="text-gray-500">B:</span>
-                          <span className="font-medium">{location.blasterPercentile}%</span>
-                        </div>
-                        <div className="flex justify-between items-center gap-2">
-                          <span className="text-gray-500">V:</span>
-                          <span className="font-medium">{location.vestPercentile}%</span>
-                        </div>
-                        <div className="flex justify-between items-center gap-2">
-                          <span className="text-gray-500">Bt:</span>
-                          <span className="font-medium">{location.batteriesPercentile}%</span>
-                        </div>
+                    <td className="py-1.5 px-2 text-center">
+                      <div className="text-[10px] flex gap-2 justify-center">
+                        <span>B:{location.blasterPercentile}%</span>
+                        <span>V:{location.vestPercentile}%</span>
+                        <span>Bt:{location.batteriesPercentile}%</span>
                       </div>
                     </td>
                   </tr>
@@ -194,37 +186,35 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="mt-8 bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Legend</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
-            <div className="flex items-center gap-2">
-              <span className={`w-8 h-8 rounded-full ${getRankBadgeColor(1)}`}></span>
-              <span>1st Place</span>
+        <div className="flex-none mt-2 bg-white rounded-lg shadow-md p-2">
+          <div className="flex items-center justify-between text-xs">
+            <div className="flex gap-3">
+              <div className="flex items-center gap-1">
+                <span className={`w-5 h-5 rounded-full ${getRankBadgeColor(1)}`}></span>
+                <span>1st</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className={`w-5 h-5 rounded-full ${getRankBadgeColor(2)}`}></span>
+                <span>2nd</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className={`w-5 h-5 rounded-full ${getRankBadgeColor(3)}`}></span>
+                <span>3rd</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className={`w-5 h-5 rounded-full ${getRankBadgeColor(5)}`}></span>
+                <span>Top 5</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className={`w-5 h-5 rounded-full ${getRankBadgeColor(10)}`}></span>
+                <span>Top 10</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className={`w-5 h-5 rounded-full ${getRankBadgeColor(15)}`}></span>
+                <span>Top 15</span>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <span className={`w-8 h-8 rounded-full ${getRankBadgeColor(2)}`}></span>
-              <span>2nd Place</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className={`w-8 h-8 rounded-full ${getRankBadgeColor(3)}`}></span>
-              <span>3rd Place</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className={`w-8 h-8 rounded-full ${getRankBadgeColor(5)}`}></span>
-              <span>Top 5</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className={`w-8 h-8 rounded-full ${getRankBadgeColor(10)}`}></span>
-              <span>Top 10</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className={`w-8 h-8 rounded-full ${getRankBadgeColor(15)}`}></span>
-              <span>Top 15</span>
-            </div>
-          </div>
-          <div className="mt-4 text-sm text-gray-600">
-            <p className="mb-2"><strong>How to use:</strong> Click on any column header to sort by that ranking metric.</p>
-            <p>Percentiles show relative performance - higher is better.</p>
+            <span className="text-gray-600">Click column headers to sort</span>
           </div>
         </div>
       </div>
