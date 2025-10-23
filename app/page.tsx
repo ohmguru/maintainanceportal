@@ -122,7 +122,7 @@ export default function Home() {
                   </th>
                   <th colSpan={2} className="py-1 px-2 text-center font-bold bg-gradient-to-r from-purple-600 to-purple-700 text-pink-300 border-b border-pink-400/50 uppercase tracking-wider border-l-2 border-pink-400/30">Blaster</th>
                   <th colSpan={2} className="py-1 px-2 text-center font-bold bg-gradient-to-r from-purple-600 to-purple-700 text-pink-300 border-b border-pink-400/50 uppercase tracking-wider border-l-2 border-pink-400/30">Vest</th>
-                  <th colSpan={2} className="py-1 px-2 text-center font-bold bg-gradient-to-r from-purple-600 to-purple-700 text-pink-300 border-b border-pink-400/50 uppercase tracking-wider border-l-2 border-pink-400/30">Battery</th>
+                  <th colSpan={3} className="py-1 px-2 text-center font-bold bg-gradient-to-r from-purple-600 to-purple-700 text-pink-300 border-b border-pink-400/50 uppercase tracking-wider border-l-2 border-pink-400/30">Battery</th>
                 </tr>
                 <tr>
                   <th
@@ -155,6 +155,7 @@ export default function Home() {
                     </div>
                   </th>
                   <th className="py-1 px-2 text-center font-semibold bg-purple-800/80 text-cyan-400 border-b border-cyan-400/30">Health %</th>
+                  <th className="py-1 px-2 text-center font-semibold bg-purple-800/80 text-green-400 border-b border-green-400/30">Inventory</th>
                 </tr>
               </thead>
               <tbody>
@@ -196,6 +197,9 @@ export default function Home() {
                     </td>
                     <td className={`py-1 px-2 text-center font-bold ${getHealthColor(location.batteriesPercentile)}`}>
                       {location.batteriesPercentile}%
+                    </td>
+                    <td className="py-1 px-2 text-center font-bold text-green-400">
+                      {location.batteryInventory}
                     </td>
                   </tr>
                 ))}

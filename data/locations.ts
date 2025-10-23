@@ -11,6 +11,7 @@ export interface Location {
   batteriesPercentile: number;
   compositePercentile: number;
   compositeRank: number;
+  batteryInventory: number;
 }
 
 // Calculate weighted composite: Battery 66%, Blaster 17%, Vest 17%
@@ -31,7 +32,8 @@ const locationsData = [
     vestPercentile: 96.0,
     batteriesPercentile: 84.0,
     compositePercentile: 85.3,
-    compositeRank: 1
+    compositeRank: 1,
+    batteryInventory: 87
   },
   {
     name: "ME San Antonio North, TX",
@@ -45,7 +47,8 @@ const locationsData = [
     vestPercentile: 88.0,
     batteriesPercentile: 72.0,
     compositePercentile: 85.3,
-    compositeRank: 1
+    compositeRank: 1,
+    batteryInventory: 97
   },
   {
     name: "ME Olathe, KS",
@@ -59,7 +62,8 @@ const locationsData = [
     vestPercentile: 72.0,
     batteriesPercentile: 96.0,
     compositePercentile: 82.7,
-    compositeRank: 3
+    compositeRank: 3,
+    batteryInventory: 108
   },
   {
     name: "ME Tulsa OK",
@@ -73,7 +77,8 @@ const locationsData = [
     vestPercentile: 100.0,
     batteriesPercentile: 80.0,
     compositePercentile: 76.0,
-    compositeRank: 4
+    compositeRank: 4,
+    batteryInventory: 112
   },
   {
     name: "ME Avondale, AZ",
@@ -87,7 +92,8 @@ const locationsData = [
     vestPercentile: 64.0,
     batteriesPercentile: 60.0,
     compositePercentile: 72.0,
-    compositeRank: 5
+    compositeRank: 5,
+    batteryInventory: 88
   },
   {
     name: "ME Grand Prairie, TX",
@@ -101,7 +107,8 @@ const locationsData = [
     vestPercentile: 84.0,
     batteriesPercentile: 20.0,
     compositePercentile: 68.0,
-    compositeRank: 6
+    compositeRank: 6,
+    batteryInventory: 104
   },
   {
     name: "ME Frisco, TX",
@@ -115,7 +122,8 @@ const locationsData = [
     vestPercentile: 80.0,
     batteriesPercentile: 64.0,
     compositePercentile: 65.3,
-    compositeRank: 7
+    compositeRank: 7,
+    batteryInventory: 90
   },
   {
     name: "ME Tempe, AZ",
@@ -129,7 +137,8 @@ const locationsData = [
     vestPercentile: 60.0,
     batteriesPercentile: 52.0,
     compositePercentile: 65.3,
-    compositeRank: 7
+    compositeRank: 7,
+    batteryInventory: 85
   },
   {
     name: "ME Humble, TX",
@@ -143,7 +152,8 @@ const locationsData = [
     vestPercentile: 68.0,
     batteriesPercentile: 92.0,
     compositePercentile: 64.0,
-    compositeRank: 9
+    compositeRank: 9,
+    batteryInventory: 91
   },
   {
     name: "ME Independance, MO",
@@ -157,7 +167,8 @@ const locationsData = [
     vestPercentile: 56.0,
     batteriesPercentile: 68.0,
     compositePercentile: 61.3,
-    compositeRank: 10
+    compositeRank: 10,
+    batteryInventory: 117
   },
   {
     name: "ME Knoxville, TN",
@@ -171,7 +182,8 @@ const locationsData = [
     vestPercentile: 4.0,
     batteriesPercentile: 88.0,
     compositePercentile: 60.0,
-    compositeRank: 11
+    compositeRank: 11,
+    batteryInventory: 89
   },
   {
     name: "ME Shenandoah, TX",
@@ -185,7 +197,8 @@ const locationsData = [
     vestPercentile: 36.0,
     batteriesPercentile: 100.0,
     compositePercentile: 60.0,
-    compositeRank: 11
+    compositeRank: 11,
+    batteryInventory: 90
   },
   {
     name: "ME Austin, TX",
@@ -199,7 +212,8 @@ const locationsData = [
     vestPercentile: 32.0,
     batteriesPercentile: 56.0,
     compositePercentile: 52.0,
-    compositeRank: 13
+    compositeRank: 13,
+    batteryInventory: 103
   },
   {
     name: "ME Atlanta, GA",
@@ -213,7 +227,8 @@ const locationsData = [
     vestPercentile: 76.0,
     batteriesPercentile: 76.0,
     compositePercentile: 52.0,
-    compositeRank: 13
+    compositeRank: 13,
+    batteryInventory: 90
   },
   {
     name: "ME OKC, OK",
@@ -227,7 +242,8 @@ const locationsData = [
     vestPercentile: 16.0,
     batteriesPercentile: 48.0,
     compositePercentile: 45.3,
-    compositeRank: 15
+    compositeRank: 15,
+    batteryInventory: 90
   },
   {
     name: "ME Louisville KT",
@@ -241,7 +257,8 @@ const locationsData = [
     vestPercentile: 92.0,
     batteriesPercentile: 28.0,
     compositePercentile: 44.0,
-    compositeRank: 16
+    compositeRank: 16,
+    batteryInventory: 105
   },
   {
     name: "ME Hoffman, IL",
@@ -255,7 +272,8 @@ const locationsData = [
     vestPercentile: 20.0,
     batteriesPercentile: 36.0,
     compositePercentile: 40.0,
-    compositeRank: 17
+    compositeRank: 17,
+    batteryInventory: 96
   },
   {
     name: "ME Wesley Chappel, FL",
@@ -269,7 +287,8 @@ const locationsData = [
     vestPercentile: 48.0,
     batteriesPercentile: 16.0,
     compositePercentile: 40.0,
-    compositeRank: 17
+    compositeRank: 17,
+    batteryInventory: 134
   },
   {
     name: "ME Norman OK",
@@ -283,7 +302,8 @@ const locationsData = [
     vestPercentile: 52.0,
     batteriesPercentile: 40.0,
     compositePercentile: 38.7,
-    compositeRank: 19
+    compositeRank: 19,
+    batteryInventory: 95
   },
   {
     name: "ME Montclair, CA",
@@ -297,7 +317,8 @@ const locationsData = [
     vestPercentile: 28.0,
     batteriesPercentile: 44.0,
     compositePercentile: 36.0,
-    compositeRank: 20
+    compositeRank: 20,
+    batteryInventory: 112
   },
   {
     name: "ME Orlando, FL",
@@ -311,7 +332,8 @@ const locationsData = [
     vestPercentile: 44.0,
     batteriesPercentile: 24.0,
     compositePercentile: 32.0,
-    compositeRank: 21
+    compositeRank: 21,
+    batteryInventory: 139
   },
   {
     name: "ME Taylor, MI",
@@ -325,7 +347,8 @@ const locationsData = [
     vestPercentile: 40.0,
     batteriesPercentile: 32.0,
     compositePercentile: 29.3,
-    compositeRank: 22
+    compositeRank: 22,
+    batteryInventory: 104
   },
   {
     name: "ME San Antonio West, TX",
@@ -339,7 +362,8 @@ const locationsData = [
     vestPercentile: 24.0,
     batteriesPercentile: 12.0,
     compositePercentile: 25.3,
-    compositeRank: 23
+    compositeRank: 23,
+    batteryInventory: 77
   },
   {
     name: "ME Beaumont, TX",
@@ -353,7 +377,8 @@ const locationsData = [
     vestPercentile: 12.0,
     batteriesPercentile: 4.0,
     compositePercentile: 12.0,
-    compositeRank: 24
+    compositeRank: 24,
+    batteryInventory: 80
   },
   {
     name: "ME Katy, TX",
@@ -367,7 +392,8 @@ const locationsData = [
     vestPercentile: 8.0,
     batteriesPercentile: 8.0,
     compositePercentile: 8.0,
-    compositeRank: 25
+    compositeRank: 25,
+    batteryInventory: 90
   }
 ];
 
