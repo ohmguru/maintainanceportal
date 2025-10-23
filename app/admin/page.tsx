@@ -334,9 +334,8 @@ export default function UnifiedAdmin() {
                             : 'bg-gradient-to-r from-pink-600 to-pink-700 text-white border-pink-400/50'
                         }`}
                       >
-                        {isCurrentWeek && <div className="text-[8px] text-cyan-200 font-bold mb-0.5">← CURRENT WEEK</div>}
-                        WEEK {week}
-                        <div className="text-[9px] opacity-80">{getWeekDateRange(week)}</div>
+                        {isCurrentWeek && <div className="text-[8px] text-cyan-200 font-bold mb-1">← CURRENT WEEK</div>}
+                        <div className="text-sm font-bold">{getWeekDateRange(week)}</div>
                       </th>
                     );
                   })}
