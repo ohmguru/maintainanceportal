@@ -13,10 +13,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "GelBlaster MechWarrior: Fleet Health Optimization",
+  title: "Gel Blaster MechWarrior: Fleet Health Optimization",
   description: "Track and optimize equipment reliability across MainEvent locations with real-time fleet health analytics.",
   openGraph: {
-    title: "GelBlaster MechWarrior: Fleet Health Optimization",
+    title: "Gel Blaster MechWarrior: Fleet Health Optimization",
     description: "Track and optimize equipment reliability across MainEvent locations with real-time fleet health analytics.",
     type: "website",
   },
