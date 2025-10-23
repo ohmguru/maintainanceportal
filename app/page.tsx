@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { locations, Location } from '@/data/locations';
 import BatteryReserveIndicator from '@/components/BatteryReserveIndicator';
 
@@ -10,9 +10,37 @@ type SortDirection = 'asc' | 'desc';
 export default function Home() {
   const [sortField, setSortField] = useState<SortField>('composite');
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
+  const [inventoryData, setInventoryData] = useState<Record<string, number>>({});
+  const [loading, setLoading] = useState(true);
+
+  // Fetch inventory data from API
+  useEffect(() => {
+    fetch('/api/battery-inventory')
+      .then(res => res.json())
+      .then(data => {
+        const invMap: Record<string, number> = {};
+        data.locations?.forEach((loc: any) => {
+          invMap[loc.location] = loc.actualInventory;
+        });
+        setInventoryData(invMap);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to fetch inventory:', err);
+        setLoading(false);
+      });
+  }, []);
+
+  // Merge static location data with dynamic inventory data
+  const locationsWithInventory = useMemo(() => {
+    return locations.map(loc => ({
+      ...loc,
+      batteryInventory: inventoryData[loc.name] ?? loc.batteryInventory
+    }));
+  }, [inventoryData]);
 
   const sortedLocations = useMemo(() => {
-    const sorted = [...locations].sort((a, b) => {
+    const sorted = [...locationsWithInventory].sort((a, b) => {
       let aValue: number, bValue: number;
 
       switch (sortField) {
@@ -38,7 +66,7 @@ export default function Home() {
     });
 
     return sorted;
-  }, [sortField, sortDirection]);
+  }, [locationsWithInventory, sortField, sortDirection]);
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -102,6 +130,11 @@ export default function Home() {
 
       <div className="flex-1 min-h-0 flex flex-col relative z-10">
         <div className="bg-black/60 backdrop-blur-sm rounded-lg border-2 border-pink-500/50 shadow-[0_0_30px_rgba(236,72,153,0.3)] overflow-hidden flex-1 flex flex-col">
+          {loading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-20">
+              <div className="text-cyan-400 text-sm font-mono animate-pulse">Loading inventory data...</div>
+            </div>
+          )}
           <div className="flex-1 overflow-auto">
             <table className="w-full text-xs" style={{ fontFamily: 'monospace' }}>
               <thead className="sticky top-0 z-10">
