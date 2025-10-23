@@ -377,8 +377,27 @@ const locationsWithComposite = locationsData.map(loc => ({
   compositePercentile: calculateComposite(loc.blasterPercentile, loc.vestPercentile, loc.batteriesPercentile)
 }));
 
-// Sort by composite percentile (descending) and assign new ranks
-const sortedByComposite = [...locationsWithComposite].sort((a, b) => b.compositePercentile - a.compositePercentile);
+// Sort by composite percentile (descending), with tiebreakers to prevent ties:
+// 1. Composite percentile (primary)
+// 2. Battery percentile (first tiebreaker - most important)
+// 3. Blaster percentile (second tiebreaker)
+// 4. Vest percentile (third tiebreaker)
+// 5. Location name alphabetically (final tiebreaker)
+const sortedByComposite = [...locationsWithComposite].sort((a, b) => {
+  if (b.compositePercentile !== a.compositePercentile) {
+    return b.compositePercentile - a.compositePercentile;
+  }
+  if (b.batteriesPercentile !== a.batteriesPercentile) {
+    return b.batteriesPercentile - a.batteriesPercentile;
+  }
+  if (b.blasterPercentile !== a.blasterPercentile) {
+    return b.blasterPercentile - a.blasterPercentile;
+  }
+  if (b.vestPercentile !== a.vestPercentile) {
+    return b.vestPercentile - a.vestPercentile;
+  }
+  return a.name.localeCompare(b.name);
+});
 
 export const locations: Location[] = sortedByComposite.map((loc, index) => ({
   ...loc,

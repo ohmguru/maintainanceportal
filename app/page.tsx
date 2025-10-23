@@ -53,13 +53,14 @@ export default function Home() {
     return sortDirection === 'asc' ? '▲' : '▼';
   };
 
-  const getRankBadgeColor = (rank: number) => {
+  const getRankBadgeColor = (rank: number, totalLocations: number = 25) => {
     if (rank === 1) return 'bg-gradient-to-r from-yellow-300 to-yellow-500 text-yellow-900 shadow-[0_0_10px_rgba(253,224,71,0.5)]';
     if (rank === 2) return 'bg-gradient-to-r from-gray-300 to-gray-400 text-gray-900 shadow-[0_0_8px_rgba(209,213,219,0.5)]';
     if (rank === 3) return 'bg-gradient-to-r from-orange-400 to-orange-500 text-orange-900 shadow-[0_0_8px_rgba(251,146,60,0.5)]';
     if (rank <= 5) return 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/50';
     if (rank <= 10) return 'bg-purple-500/20 text-purple-300 border border-purple-400/50';
     if (rank <= 15) return 'bg-pink-500/20 text-pink-300 border border-pink-400/50';
+    if (rank > totalLocations - 5) return 'bg-red-500/20 text-red-400 border border-red-400/50';
     return 'bg-gray-500/20 text-gray-400 border border-gray-500/50';
   };
 
@@ -223,6 +224,10 @@ export default function Home() {
               <div className="flex gap-2 items-center">
                 <span className={`w-5 h-5 rounded ${getRankBadgeColor(15)}`}></span>
                 <span className="text-pink-300">Top 15</span>
+              </div>
+              <div className="flex gap-2 items-center">
+                <span className={`w-5 h-5 rounded ${getRankBadgeColor(21, 25)}`}></span>
+                <span className="text-red-400">Bottom 5</span>
               </div>
             </div>
             <span className="text-pink-400 animate-pulse">▲ Click headers to sort</span>
