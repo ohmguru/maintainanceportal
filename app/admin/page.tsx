@@ -22,11 +22,54 @@ export default function UnifiedAdmin() {
   const [allocationBase, setAllocationBase] = useState(90);
   const [finalEmergencyReserve, setFinalEmergencyReserve] = useState(142);
 
-  const weeks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+  // Generate weeks from start date (June 8, 2024) through end of 2024
+  const startDate = new Date('2024-06-08');
+  const endDate = new Date('2024-12-31');
+  const weeks: number[] = [];
+  const weekRanges: string[] = [];
+
+  let currentWeekStart = new Date(startDate);
+  let weekNumber = 1;
+
+  while (currentWeekStart <= endDate) {
+    weeks.push(weekNumber);
+    const weekEnd = new Date(currentWeekStart);
+    weekEnd.setDate(weekEnd.getDate() + 6);
+
+    const startMonth = currentWeekStart.getMonth() + 1;
+    const startDay = currentWeekStart.getDate();
+    const endMonth = weekEnd.getMonth() + 1;
+    const endDay = weekEnd.getDate();
+
+    weekRanges.push(`${startMonth}/${startDay}-${endMonth}/${endDay}`);
+
+    currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+    weekNumber++;
+  }
+
+  // Calculate current week based on today's date
+  const getCurrentWeek = () => {
+    const today = new Date();
+    const diffTime = Math.abs(today.getTime() - startDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const weekNum = Math.ceil(diffDays / 7);
+    return Math.min(weekNum, weeks.length);
+  };
 
   useEffect(() => {
     loadData();
   }, []);
+
+  useEffect(() => {
+    if (!loading && data.length > 0) {
+      // Auto-scroll to current week after data loads
+      const currentWeek = getCurrentWeek();
+      const currentWeekHeader = document.getElementById(`week-${currentWeek}`);
+      if (currentWeekHeader) {
+        currentWeekHeader.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+      }
+    }
+  }, [loading, data]);
 
   const loadData = async () => {
     try {
@@ -193,12 +236,10 @@ export default function UnifiedAdmin() {
   };
 
   const getWeekDateRange = (week: number): string => {
-    const ranges = [
-      '6/8-6/14', '6/15-6/21', '6/22-6/28', '6/29-7/5', '7/6-7/12', '7/13-7/20', '7/21-7/27',
-      '7/27-8/2', '8/3-8/9', '8/10-8/16', '8/17-8/23', '8/24-8/30', '8/31-9/6', '9/7-9/13'
-    ];
-    return ranges[week - 1] || '';
+    return weekRanges[week - 1] || '';
   };
+
+  const currentWeek = getCurrentWeek();
 
   if (loading) {
     return (
@@ -280,29 +321,46 @@ export default function UnifiedAdmin() {
                   <th className="p-2 text-center bg-gradient-to-r from-green-600 to-green-700 text-white border border-green-400/50">
                     INVENTORY
                   </th>
-                  {weeks.map(week => (
-                    <th key={week} colSpan={3} className="p-2 text-center bg-gradient-to-r from-pink-600 to-pink-700 text-white border border-pink-400/50">
-                      WEEK {week}
-                      <div className="text-[9px] opacity-80">{getWeekDateRange(week)}</div>
-                    </th>
-                  ))}
+                  {weeks.map(week => {
+                    const isCurrentWeek = week === currentWeek;
+                    return (
+                      <th
+                        key={week}
+                        id={`week-${week}`}
+                        colSpan={3}
+                        className={`p-2 text-center border ${
+                          isCurrentWeek
+                            ? 'bg-gradient-to-r from-cyan-600 to-cyan-700 text-white border-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.6)]'
+                            : 'bg-gradient-to-r from-pink-600 to-pink-700 text-white border-pink-400/50'
+                        }`}
+                      >
+                        {isCurrentWeek && <div className="text-[8px] text-cyan-200 font-bold mb-0.5">← CURRENT WEEK</div>}
+                        WEEK {week}
+                        <div className="text-[9px] opacity-80">{getWeekDateRange(week)}</div>
+                      </th>
+                    );
+                  })}
                 </tr>
                 <tr>
                   <th className="p-1 bg-purple-800/80 text-purple-300 border border-purple-400/30 sticky left-0 z-20"></th>
                   <th className="p-1 bg-green-800/80 text-green-300 border border-green-400/30"></th>
-                  {weeks.map(week => (
-                    <>
-                      <th key={`${week}-b`} className="p-1 text-center bg-pink-800/80 text-pink-300 border border-pink-400/30 text-[10px]">
-                        BLST
-                      </th>
-                      <th key={`${week}-v`} className="p-1 text-center bg-pink-800/80 text-pink-300 border border-pink-400/30 text-[10px]">
-                        VEST
-                      </th>
-                      <th key={`${week}-bat`} className="p-1 text-center bg-pink-800/80 text-pink-300 border border-pink-400/30 text-[10px]">
-                        BATT
-                      </th>
-                    </>
-                  ))}
+                  {weeks.map(week => {
+                    const isCurrentWeek = week === currentWeek;
+                    const bgClass = isCurrentWeek ? 'bg-cyan-800/80 text-cyan-300 border-cyan-400/30' : 'bg-pink-800/80 text-pink-300 border-pink-400/30';
+                    return (
+                      <>
+                        <th key={`${week}-b`} className={`p-1 text-center ${bgClass} text-[10px]`}>
+                          BLST
+                        </th>
+                        <th key={`${week}-v`} className={`p-1 text-center ${bgClass} text-[10px]`}>
+                          VEST
+                        </th>
+                        <th key={`${week}-bat`} className={`p-1 text-center ${bgClass} text-[10px]`}>
+                          BATT
+                        </th>
+                      </>
+                    );
+                  })}
                 </tr>
               </thead>
               <tbody>
