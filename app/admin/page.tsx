@@ -124,7 +124,7 @@ export default function UnifiedAdmin() {
         weeklyReturns[r.location][dateKey] = {
           blastersReturned: r.blastersReturned || 0,
           vestsReturned: r.vestsReturned || 0,
-          batteriesReturned: r.batteriesReturned || 0
+          batteriesReturned: Math.round(r.batteriesReturned || 0)
         };
       });
 
@@ -221,7 +221,7 @@ export default function UnifiedAdmin() {
             weekEndDate: weekInfo.endDate.toISOString().split('T')[0],
             blastersReturned: weekData.blastersReturned,
             vestsReturned: weekData.vestsReturned,
-            batteriesReturned: weekData.batteriesReturned,
+            batteriesReturned: Math.round(weekData.batteriesReturned),
             players: 0
           };
         })
@@ -440,9 +440,8 @@ export default function UnifiedAdmin() {
                           <td key={`${loc.name}-${weekInfo.dateKey}-bat`} className="p-1 text-center border border-pink-500/20">
                             <input
                               type="number"
-                              step="0.1"
                               value={weekData.batteriesReturned}
-                              onChange={(e) => handleWeekDataChange(loc.name, weekInfo.dateKey, 'batteriesReturned', parseFloat(e.target.value) || 0)}
+                              onChange={(e) => handleWeekDataChange(loc.name, weekInfo.dateKey, 'batteriesReturned', Math.round(parseFloat(e.target.value) || 0))}
                               onKeyDown={(e) => handleKeyDown(e, loc.name, weekInfo.dateKey, 'batteriesReturned')}
                               onFocus={handleFocus}
                               className="w-12 text-center bg-black/60 border border-pink-400/30 rounded px-1 text-pink-300 text-xs focus:border-pink-400 focus:outline-none"

@@ -57,7 +57,7 @@ for (let i = 1; i < lines.length; i++) {
         weekEndDate: weekInfo.weekEndDate,
         blastersReturned: parseFloat(values[3] || '0'),
         vestsReturned: parseFloat(values[4] || '0'),
-        batteriesReturned: parseFloat(values[5] || '0'),
+        batteriesReturned: Math.round(parseFloat(values[5] || '0')),
         players: parseInt(values[6] || '0')
       });
     }
